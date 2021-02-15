@@ -1,5 +1,7 @@
 <?php
-namespace RefactoringGuru\FactoryMethod\RealWorld;
+namespace phpDesignPatterns;
+
+require_once '../vendor/autoload.php';
 
 abstract class SocialNetworkPoster {
     abstract public function getSocialNetwork(): SocialNetworkConnector;
@@ -51,13 +53,13 @@ class FacebookConnector implements SocialNetworkConnector {
     }
 
     public function login(): void {
-        echo "send http api request to log in Facebook $this->login";
+        echo "send http api request to log in Facebook $this->login <br/>";
     }
     public function logout(): void {
-        echo "send http api request to log out Facebook $this->login";
+        echo "send http api request to log out Facebook $this->login<br/>";
     }
     public function createPost($content): void {
-        echo "send http api request to create post in Facebook";
+        echo "send http api request to create post in Facebook<br/>";
     }
 }
 
@@ -70,23 +72,23 @@ class LinkedInConnector implements SocialNetworkConnector {
     }
 
     public function login(): void {
-        echo "send http api request to log in LinkeIn $this->email";
+        echo "send http api request to log in LinkedIn $this->email<br/>";
     }
     public function logout(): void {
-        echo "send http api request to log out LinkeIn $this->email";
+        echo "send http api request to log out LinkedIn $this->email<br/>";
     }
     public function createPost($content): void {
-        echo "send http api request to create post in LinkeIn";
+        echo "send http api request to create post in LinkedIn<br/>";
     }
 }
 
 function clientCode(SocialNetworkPoster $creator) {
-    $creator->post("Hello World");
+    $creator->post("Hello World<br/>");
 }
 
-echo "Testing ConcreteCreator1:\n";
+echo "Testing ConcreteCreator1:<br/>";
 clientCode(new FacebookPoster("john_doe", "*****"));
 echo "\n\n";
-echo "Testing ConcreteCreator2:\n";
+echo "Testing ConcreteCreator2:<br/>";
 clientCode(new LinkedInPoster("john_doe@test.com", "*****"));
 

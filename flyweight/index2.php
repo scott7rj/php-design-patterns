@@ -1,48 +1,71 @@
 <?php
 namespace phpDesignPatterns;
 
-$carType = array("subcompact", "compact", "suv");
+interface IShape {
+    public function draw();
+}
 
-class Car {
-    private static $pool = array();
-    private $carType;
-    public function __construct($carType) {
-        $obj = array_search($carType, Car::$pool);
-        if(empty($obj)) {
-            $obj = new Car($carType);
-            array_push(Car::$pool, $carType);
-            $obj->carType = $carType;
+class Circle implements IShape {
+    private $color;
+    private $x;
+    private $y;
+    private $radius;
+ 
+    public function __construct(string $color){
+       $this->color = $color;		
+    }
+ 
+    public function setX(int $x) {
+       $this->x = $x;
+    }
+ 
+    public function setY(int $y) {
+       $this->y = $y;
+    }
+ 
+    public function setRadius(int $radius) {
+       $this->radius = $radius;
+    }
+ 
+    public function draw() {
+       print("Circle: Draw() [Color : $this->color , x : $this->x, y : $this->y, radius : $this->radius\n");
+    }
+ }
+
+class ShapeFactory {
+
+    private static $circleMap = array();
+ 
+    static function getCircle(string $color) : ?IShape {
+        if(!array_key_exists($color, ShapeFactory::$circleMap)) {
+            $circle = new Circle($color);
+            ShapeFactory::$circleMap[$color] = $circle;
+            print("Creating circle of color : $color\n");
+        } else {
+            $circle = ShapeFactory::$circleMap[$color];
         }
-        return $obj;
-    }
-
-    public function render($color, $x, $y) {
-        $msg = "render a car of type $this->carType and color $color at($x, $y)";
-        print(msg);
+        return $circle;
     }
 }
 
+static $colors = array("Red", "Green", "Blue", "White", "Black");
 
-$colors = array("white", "black", "silver", "gray", "red", "blue", "brown", "beige", "yellow", "green");
-$carCounter = 0;
-
-foreach (range(0, 1) as $number) {
-    $c1 = new Car("subcompact");
-    $c1.render(array_rand($colors), rand(0, 100), rand(0, 100));
-    $carCounter += 1;
+function getRandomColor($colors) {
+    return array_rand($colors, 1);
 }
 
-//foreach (range(0, 2) as $number) {
-//    $c2 = new Car("compact");
-//    $c2.render(array_rand($colors), rand(0, 100), rand(0, 100));
-//    $carCounter += 1;
-//}
-//
-//foreach (range(0, 2) as $number) {
-//    $c3 = new Car("suv");
-//    $c3.render(array_rand($colors), rand(0, 100), rand(0, 100));
-//    $carCounter += 1;
-//}
+function getRandomX() {
+    return rand(1, 100);
+}
 
-print("cars rendered: $carCounter");
-print("cars actually created: {".sizeof(Car::$pool)."}");
+function getRandomY() {
+    return rand(1, 100);
+}
+
+for($i=0; $i < 50; $i++) {
+    $circle = ShapeFactory::getCircle($colors[getRandomColor($colors)]);
+    $circle->setX(getRandomX());
+    $circle->setY(getRandomY());
+    $circle->setRadius(100);
+    $circle->draw();
+}
